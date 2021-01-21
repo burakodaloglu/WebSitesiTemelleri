@@ -1,0 +1,200 @@
+<!DOCTYPE>
+<html>
+
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <meta charset="utf-8">
+    <link href='https://css.gg/css' rel='stylesheet'>
+    <link href='https://css.gg/instagram.css' rel='stylesheet'>
+    <link rel="stylesheet" href="css/istatistik.css">
+    <script src="js/canvasjs.js"></script>
+    <title>İSTATİSTİKLER</title>
+<script>
+window.onload = function () {
+
+
+var options = {
+	animationEnabled: true,
+	theme: "light2",
+	title:{
+		text: "TÜRKİYE & İNGİLTERE VAKA GRAFİĞİ"
+	},
+	axisX:{
+		valueFormatString: "DD MMM"
+	},
+	axisY: {
+		title: "VAKA SAYILARI",
+		suffix: "K",
+		minimum: 0
+	},
+	toolTip:{
+		shared:true
+	},  
+	legend:{
+		cursor:"pointer",
+		verticalAlign: "bottom",
+		horizontalAlign: "left",
+		dockInsidePlotArea: true,
+		itemclick: toogleDataSeries
+	}
+};
+
+options.data = [{
+		type: "line",
+		showInLegend: true,
+		name: "Türkiye - Aktif vaka",
+		markerType: "square",
+		xValueFormatString: "DD MMM, YYYY",
+		color: "#fffff",
+		yValueFormatString: "#,##0K"
+	},
+	{
+		type: "line",
+		showInLegend: true,
+		name: "İngiltere - Aktif vaka",
+		markerType: "square",
+		xValueFormatString: "DD MMM, YYYY",
+		yValueFormatString: "#,##0K"
+	}]
+
+var trDataArray = [];
+var ukDataArray = [];
+
+$.ajax({
+        type: 'GET',
+        url: 'https://api.covid19api.com/country/turkey?from=2020-10-01T00:00:00Z&to=2021-01-15T00:00:00Z',
+        dataType: 'json',
+        success: function(data) {
+			for (let index = 0; index < Object.keys(data).length; index++) {
+				trDataArray.push({x: new Date(data[index].Date), y: data[index].Active})
+			}
+			options.data[0].dataPoints = trDataArray;
+        }
+	});
+	
+	$.ajax({
+        type: 'GET',
+        url: 'https://api.covid19api.com/country/uk?from=2020-10-01T00:00:00Z&to=2021-01-15T00:00:00Z',
+        dataType: 'json',
+        success: function(data) {
+            for (let index = 0; index < Object.keys(data).length; index++) {
+				ukDataArray.push({x: new Date(data[index].Date), y: data[index].Active})
+			}
+			options.data[1].dataPoints = ukDataArray;
+			$("#chartContainer").CanvasJSChart(options);
+        }
+	});	
+	
+
+function toogleDataSeries(e){
+	if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+		e.dataSeries.visible = false;
+	} else{
+		e.dataSeries.visible = true;
+	}
+	e.chart.render();
+}
+
+}
+</script>
+</head>
+
+<body class="body">
+
+    <div class="header">
+          <div class="row">
+            <nav class="col-12 navbar navbar-expand-lg navbar-dark bg-secondary">
+                <a class="navbar-brand" href="#"><img src="resim/logo.png" height="50px" width="60px"></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                    <ul class="navbar-nav">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="anasayfa.html">ANASAYFA <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="haberler.html">HABERLER</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="hakkimizda.html">HAKKIMIZDA</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="istatistik.html">İSTATİSTİKLER</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+
+
+
+
+        </div>
+  
+        <div class="orta3">
+          
+ <main>
+                <div class="kutu">
+        <div id="chartContainer" style="height: 450px; width: 100%;"></div>
+                </div>
+            </main>
+
+        </div>
+    </div>
+<hr color=#8b0000r>
+   
+   
+
+
+
+
+
+
+
+
+
+
+
+    <footer class="footer-marmaram">
+        <div class="footer-left">
+            <h3>Covid-<span>19</span></h3>
+            <p class="footer-links">
+                <a href="Marmaram.html">Ana Sayfa</a>
+                ·
+                <a href="https://www.google.com/maps/dir/40.9248328,29.1972044/MARMARAM+ET/@40.9219855,29.1724321,14z/data=!3m1!4b1!4m9!4m8!1m1!4e1!1m5!1m1!1s0x14cac59a89ad0009:0x126489d49dac94ed!2m2!1d29.2064527!2d40.9205188">Adres</a>
+                ·
+                <a href="hakk%C4%B1m%C4%B1zda.html">Hakkımızda</a>
+                ·
+
+
+                <a href="iletisim.html">İletişim</a>
+            </p>
+            <p class="footer-textmet">© 2020 Tüm Hakları Saklıdır.</p>
+        </div>
+        <div class="footer-center">
+            <div>
+                <i class="fa fa-map-marker"></i>
+                <img src="resim/logo.png" height="150px" width="175px">
+
+            </div>
+         
+
+        </div>
+        <div class="footer-right">
+           <img src="resim/bakanl%C4%B1k_logo.png" height="200px" width="200px">
+            
+        </div>
+    </footer>
+
+
+
+
+
+<script src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+<script src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
+
+</body>
+
+</html>
